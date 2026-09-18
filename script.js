@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         bgVideo.addEventListener('loadeddata', () => {
             console.log('✅ Video loaded:', bgVideo.currentSrc);
         });
-
         bgVideo.addEventListener('error', () => {
             console.error('❌ Video loading error:', bgVideo.error);
         });
@@ -39,7 +38,73 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================================
-    // 2. SMOOTH SCROLL TO DOWNLOAD
+    // 2. HERO INTRO
+    // =========================================================
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, 700);
+
+    // =========================================================
+    // 3. PARALLAX
+    // =========================================================
+    const hero       = document.getElementById('hero');
+    const heroTitle  = document.getElementById('heroTitle');
+    const videoLayer = document.getElementById('parallaxVideo');
+    const hasHover   = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (hero && heroTitle && videoLayer && hasHover) {
+        const VIDEO_AMPLITUDE = 30;
+        const TITLE_AMPLITUDE = 22;
+        const SMOOTHING       = 0.06;
+
+        let targetX = 0, targetY = 0;
+        let currentX = 0, currentY = 0;
+        let rafId = null;
+        let isAnimating = false;
+
+        const loop = () => {
+            currentX += (targetX - currentX) * SMOOTHING;
+            currentY += (targetY - currentY) * SMOOTHING;
+
+            videoLayer.style.transform = `translate3d(${currentX * VIDEO_AMPLITUDE}px, ${currentY * VIDEO_AMPLITUDE}px, 0)`;
+            heroTitle.style.transform  = `translate3d(${currentX * -TITLE_AMPLITUDE}px, ${currentY * -TITLE_AMPLITUDE}px, 0)`;
+
+            const dx = Math.abs(targetX - currentX);
+            const dy = Math.abs(targetY - currentY);
+
+            if (dx > 0.0005 || dy > 0.0005) {
+                rafId = requestAnimationFrame(loop);
+            } else {
+                videoLayer.style.transform = `translate3d(${targetX * VIDEO_AMPLITUDE}px, ${targetY * VIDEO_AMPLITUDE}px, 0)`;
+                heroTitle.style.transform  = `translate3d(${targetX * -TITLE_AMPLITUDE}px, ${targetY * -TITLE_AMPLITUDE}px, 0)`;
+                rafId = null;
+                isAnimating = false;
+            }
+        };
+
+        const startLoop = () => {
+            if (!isAnimating) {
+                isAnimating = true;
+                rafId = requestAnimationFrame(loop);
+            }
+        };
+
+        hero.addEventListener('mousemove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            targetX = (e.clientX - rect.left) / rect.width  - 0.5;
+            targetY = (e.clientY - rect.top)  / rect.height - 0.5;
+            startLoop();
+        });
+
+        hero.addEventListener('mouseleave', () => {
+            targetX = 0;
+            targetY = 0;
+            startLoop();
+        });
+    }
+
+    // =========================================================
+    // 4. SMOOTH SCROLL TO DOWNLOAD
     // =========================================================
     const mainBtn         = document.getElementById('mainDownload');
     const downloadSection = document.getElementById('downloadSection');
@@ -51,10 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================================
-    // 3. PAUSE VIDEO WHEN NOT VISIBLE
+    // 5. PAUSE VIDEO WHEN NOT VISIBLE
     // =========================================================
-    const hero = document.getElementById('hero');
-
     if (bgVideo && hero && 'IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -65,28 +128,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }, { threshold: 0.1 });
-
         observer.observe(hero);
     }
 
     // =========================================================
-    // 4. BUTTON FADE IN
+    // 6. REVEAL ON SCROLL
     // =========================================================
-    if (mainBtn) {
-        mainBtn.style.opacity = '0';
-        mainBtn.style.transform = 'translateY(20px)';
-
-        setTimeout(() => {
-            mainBtn.style.transition = 'opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1)';
-            mainBtn.style.opacity = '1';
-            mainBtn.style.transform = 'translateY(0)';
-        }, 400);
-    }
-
-    // =========================================================
-    // 5. REVEAL ON SCROLL — плавное каскадное появление
-    // =========================================================
-    const revealItems = document.querySelectorAll('.reveal');
+    const revealItems = document.querySelectorAll('.reveal, .monster-card');
 
     if ('IntersectionObserver' in window && revealItems.length) {
         const revealObserver = new IntersectionObserver((entries) => {
@@ -99,7 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             visible.forEach((entry, i) => {
                 const el = entry.target;
-                el.style.transitionDelay = `${i * 0.1}s`;
+                // НЕ добавляем transitionDelay монстрам — у них анимация, а не transition
+                if (!el.classList.contains('monster-card')) {
+                    el.style.transitionDelay = `${i * 0.12}s`;
+                }
                 el.classList.add('visible');
                 revealObserver.unobserve(el);
             });
@@ -112,5 +163,40 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         revealItems.forEach(item => item.classList.add('visible'));
     }
+
+    // =========================================================
+    // 7. FIX: после завершения появления карточки монстра
+    //    ставим .intro-done, чтобы monsterGlitchIn больше
+    //    не перезапускался при уходе курсора.
+    //    Плюс fallback на setTimeout — на случай, если по
+    //    какой-то причине animationend не сработает.
+    // =========================================================
+    document.querySelectorAll('.monster-card').forEach(card => {
+        let done = false;
+        const markDone = () => {
+            if (done) return;
+            done = true;
+            card.classList.add('intro-done');
+        };
+
+        card.addEventListener('animationend', (e) => {
+            if (e.animationName === 'monsterGlitchIn') markDone();
+        });
+
+        // Fallback: если через 1.4s карточка видима, но intro-done нет — ставим вручную
+        const checkFallback = () => {
+            if (card.classList.contains('visible') && !card.classList.contains('intro-done')) {
+                markDone();
+            }
+        };
+        // Проверяем периодически — проще, чем ловить момент появления
+        const intId = setInterval(() => {
+            if (card.classList.contains('intro-done')) {
+                clearInterval(intId);
+            } else {
+                checkFallback();
+            }
+        }, 400);
+    });
 
 });

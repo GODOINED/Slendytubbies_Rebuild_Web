@@ -10,18 +10,78 @@
 </head>
 <body>
 
+    <svg xmlns="http://www.w3.org/2000/svg" class="svg-filters" aria-hidden="true" focusable="false">
+        <defs>
+            <filter id="roughFilterA" x="-25%" y="-50%" width="150%" height="200%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.03 0.09"
+                              numOctaves="3" seed="3" result="noise">
+                    <animate attributeName="baseFrequency" dur="26s"
+                             values="0.03 0.09;0.038 0.11;0.026 0.075;0.035 0.1;0.03 0.09"
+                             keyTimes="0;0.25;0.5;0.75;1"
+                             calcMode="spline"
+                             keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                             repeatCount="indefinite"/>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise"
+                                   scale="6" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <filter id="roughFilterB" x="-25%" y="-50%" width="150%" height="200%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.03 0.09"
+                              numOctaves="3" seed="7" result="noise">
+                    <animate attributeName="baseFrequency" dur="30s"
+                             values="0.03 0.09;0.026 0.075;0.038 0.11;0.032 0.095;0.03 0.09"
+                             keyTimes="0;0.25;0.5;0.75;1"
+                             calcMode="spline"
+                             keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                             repeatCount="indefinite"/>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise"
+                                   scale="6" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <filter id="roughFilterC" x="-25%" y="-50%" width="150%" height="200%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.03 0.09"
+                              numOctaves="3" seed="11" result="noise">
+                    <animate attributeName="baseFrequency" dur="34s"
+                             values="0.03 0.09;0.035 0.1;0.027 0.08;0.037 0.105;0.03 0.09"
+                             keyTimes="0;0.25;0.5;0.75;1"
+                             calcMode="spline"
+                             keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                             repeatCount="indefinite"/>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise"
+                                   scale="6" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+
+            <!-- НОВЫЙ ФИЛЬТР ДЛЯ ОБВОДКИ КНОПКИ DOWNLOAD -->
+            <filter id="roughLineFilter" x="-20%" y="-40%" width="140%" height="180%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.025 0.08"
+                              numOctaves="3" seed="5" result="noise">
+                    <animate attributeName="baseFrequency" dur="20s"
+                             values="0.025 0.08;0.032 0.095;0.02 0.07;0.028 0.085;0.025 0.08"
+                             keyTimes="0;0.25;0.5;0.75;1"
+                             calcMode="spline"
+                             keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                             repeatCount="indefinite"/>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise"
+                                   scale="5" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </defs>
+    </svg>
+
     <!-- ===================== HERO ===================== -->
     <section class="hero" id="hero">
-        <video class="bg-video" id="bgVideo"
-               autoplay muted loop playsinline preload="auto">
-            <source src="bg.webm" type="video/webm">
-            <source src="bg.mp4"  type="video/mp4">
-            <source src="bg.ogv"  type="video/ogg">
-        </video>
+        <div class="parallax-layer" id="parallaxVideo">
+            <video class="bg-video" id="bgVideo"
+                   autoplay muted loop playsinline preload="auto">
+                <source src="bg.webm" type="video/webm">
+                <source src="bg.mp4"  type="video/mp4">
+                <source src="bg.ogv"  type="video/ogg">
+            </video>
+        </div>
 
         <div class="overlay"></div>
 
-        <!-- ============ TOP FOG EDGE ============ -->
         <svg class="paint-frame top" viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true">
             <defs>
                 <linearGradient id="fadeTopGrad" x1="0" y1="0" x2="0" y2="1">
@@ -29,7 +89,6 @@
                     <stop offset="60%"  stop-color="#000000" stop-opacity="0.95"/>
                     <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
                 </linearGradient>
-
                 <filter id="paintTop1" x="-15%" y="-60%" width="130%" height="220%">
                     <feTurbulence type="fractalNoise" baseFrequency="0.012 0.035"
                                   numOctaves="5" seed="3" result="noise">
@@ -55,15 +114,17 @@
             </g>
         </svg>
 
-        <div class="hero-content">
-            <h1 class="hero-title">
+        <div class="hero-content" id="heroContent">
+            <h1 class="hero-title" id="heroTitle">
                 <span class="white">Slendytubbies</span>
                 <span class="red">Rebuild</span>
             </h1>
-            <button class="download-btn" id="mainDownload">Download</button>
+
+            <div class="download-btn-wrap">
+                <button class="download-btn" id="mainDownload">Download</button>
+            </div>
         </div>
 
-        <!-- ============ BOTTOM FOG EDGE ============ -->
         <svg class="paint-frame bottom" viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true">
             <defs>
                 <linearGradient id="fadeBottomGrad" x1="0" y1="1" x2="0" y2="0">
@@ -71,7 +132,6 @@
                     <stop offset="60%"  stop-color="#000000" stop-opacity="0.95"/>
                     <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
                 </linearGradient>
-
                 <filter id="paintBottom1" x="-15%" y="-60%" width="130%" height="220%">
                     <feTurbulence type="fractalNoise" baseFrequency="0.012 0.035"
                                   numOctaves="5" seed="9" result="noise">
@@ -120,7 +180,6 @@
                 </p>
             </div>
 
-            <!-- GAME MODES -->
             <div class="about-block">
                 <h3 class="block-title reveal">Game Modes</h3>
                 <div class="mode-grid">
@@ -143,7 +202,6 @@
                 </div>
             </div>
 
-            <!-- ENEMIES -->
             <div class="about-block">
                 <h3 class="block-title reveal">Enemies</h3>
                 <p class="block-subtitle reveal">
@@ -196,11 +254,9 @@
                             <p>The red Teletubby who became the final boss. Slower than the others, but deals devastating damage.</p>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            <!-- MULTIPLAYER -->
             <div class="about-block">
                 <h3 class="block-title reveal">Steam Multiplayer</h3>
                 <p class="about-text reveal">
@@ -211,7 +267,6 @@
                 </p>
             </div>
 
-            <!-- SYSTEM REQUIREMENTS -->
             <div class="about-block">
                 <h3 class="block-title reveal">System Requirements</h3>
                 <p class="block-subtitle reveal">Make sure your PC can handle the horror.</p>
@@ -228,7 +283,6 @@
                             <li><span>Network</span> Broadband Internet connection</li>
                         </ul>
                     </div>
-
                     <div class="sysreq-card reveal">
                         <h4>Recommended</h4>
                         <ul>
@@ -243,10 +297,30 @@
                 </div>
             </div>
 
+            <div class="about-block">
+                <h3 class="block-title reveal">Changelog</h3>
+                <p class="block-subtitle reveal">What's new in Rebuild — every update makes the darkness deeper.</p>
+
+                <div class="changelog-list">
+                    
+                    <div class="changelog-item reveal">
+                        <div class="changelog-head">
+                            <span class="changelog-version">web release</span>
+                            <span class="changelog-date">September 2026</span>
+                        </div>
+                        <h4>Initial website launch and start of development</h4>
+                        <ul>
+                            <li>Detailed descriptions</li>
+                            <li>Discord button</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </section>
 
-    <!-- ===================== DOWNLOAD ===================== -->
     <section class="download-section" id="downloadSection">
         <h2 class="reveal">Download the Game</h2>
         <p class="subtitle reveal">Pick your platform</p>
@@ -267,7 +341,6 @@
         </div>
     </section>
 
-    <!-- ===================== FOOTER ===================== -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-socials">
