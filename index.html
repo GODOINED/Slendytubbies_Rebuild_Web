@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slendytubbies Rebuild</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="preload" href="ldslender.ttf" as="font" type="font/ttf" crossorigin>
+</head>
+<body>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" id="hero">
+        <video class="bg-video" id="bgVideo"
+               autoplay muted loop playsinline preload="auto">
+            <source src="bg.webm" type="video/webm">
+            <source src="bg.mp4"  type="video/mp4">
+            <source src="bg.ogv"  type="video/ogg">
+        </video>
+
+        <div class="overlay"></div>
+
+        <!-- ============ TOP FOG EDGE ============ -->
+        <svg class="paint-frame top" viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+                <linearGradient id="fadeTopGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%"   stop-color="#000000" stop-opacity="1"/>
+                    <stop offset="60%"  stop-color="#000000" stop-opacity="0.95"/>
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                </linearGradient>
+
+                <filter id="paintTop1" x="-15%" y="-60%" width="130%" height="220%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.035"
+                                  numOctaves="5" seed="3" result="noise">
+                        <animate attributeName="baseFrequency"
+                                 dur="32s"
+                                 values="0.012 0.035; 0.014 0.040; 0.011 0.032; 0.013 0.038; 0.012 0.035"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1"
+                                 calcMode="spline"
+                                 keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"
+                                 repeatCount="indefinite"/>
+                    </feTurbulence>
+                    <feDisplacementMap in="SourceGraphic" in2="noise"
+                                       scale="55" xChannelSelector="R" yChannelSelector="G"/>
+                </filter>
+            </defs>
+            <g filter="url(#paintTop1)">
+                <path d="M-20,-30 L1220,-30 L1220,80
+                         C1100,64 1000,92 880,80
+                         C760,64 640,92 520,80
+                         C400,64 280,92 160,80
+                         C80,72 20,88 -20,80 Z"
+                      fill="url(#fadeTopGrad)"/>
+            </g>
+        </svg>
+
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="white">Slendytubbies</span>
+                <span class="red">Rebuild</span>
+            </h1>
+            <button class="download-btn" id="mainDownload">Download</button>
+        </div>
+
+        <!-- ============ BOTTOM FOG EDGE ============ -->
+        <svg class="paint-frame bottom" viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+                <linearGradient id="fadeBottomGrad" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0%"   stop-color="#000000" stop-opacity="1"/>
+                    <stop offset="60%"  stop-color="#000000" stop-opacity="0.95"/>
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                </linearGradient>
+
+                <filter id="paintBottom1" x="-15%" y="-60%" width="130%" height="220%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.035"
+                                  numOctaves="5" seed="9" result="noise">
+                        <animate attributeName="baseFrequency"
+                                 dur="36s"
+                                 values="0.012 0.035; 0.013 0.038; 0.011 0.031; 0.014 0.039; 0.012 0.035"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1"
+                                 calcMode="spline"
+                                 keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"
+                                 repeatCount="indefinite"/>
+                    </feTurbulence>
+                    <feDisplacementMap in="SourceGraphic" in2="noise"
+                                       scale="55" xChannelSelector="R" yChannelSelector="G"/>
+                </filter>
+            </defs>
+            <g filter="url(#paintBottom1)">
+                <path d="M-20,130 L1220,130 L1220,20
+                         C1100,36 1000,8 880,20
+                         C760,36 640,8 520,20
+                         C400,36 280,8 160,20
+                         C80,28 20,12 -20,20 Z"
+                      fill="url(#fadeBottomGrad)"/>
+            </g>
+        </svg>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section class="about-section" id="aboutSection">
+        <div class="about-container">
+
+            <div class="about-intro reveal">
+                <h2 class="about-heading">
+                    <span class="white">Slendytubbies</span>
+                    <span class="red">Rebuild</span>
+                </h2>
+                <p class="about-lead">
+                    A complete reimagining of the classic — with working multiplayer
+                    through Steam. Collect custard, hide from monsters and survive
+                    together with your friends. Or become one of them.
+                </p>
+                <p class="about-text">
+                    The project recreates the atmosphere and mechanics of Slendytubbies III,
+                    but with an improved networking layer, new game modes and an expanded
+                    roster of enemies. Familiar maps, dark locations, and a deadly threat
+                    that only gets worse with every update.
+                </p>
+            </div>
+
+            <!-- GAME MODES -->
+            <div class="about-block">
+                <h3 class="block-title reveal">Game Modes</h3>
+                <div class="mode-grid">
+                    <div class="mode-card reveal">
+                        <h4>Classic (CO-OP)</h4>
+                        <p>The classic custard-collecting mode against the clock. Players team up, explore the map and find every custard portion while a monster stalks them. Victory comes only through cooperation.</p>
+                    </div>
+                    <div class="mode-card reveal">
+                        <h4>Versus</h4>
+                        <p>One player becomes the monster and hunts the survivors. The rest must collect all custard before the timer runs out. Tension grows every second — because now the enemy thinks like you.</p>
+                    </div>
+                    <div class="mode-card reveal">
+                        <h4>Classic+</h4>
+                        <p>A harder version of classic. Collecting custard is not enough — you must find a key and open the door, start the generator to restore power, or complete another objective. Depends on the map.</p>
+                    </div>
+                    <div class="mode-card reveal">
+                        <h4>RolePlay</h4>
+                        <p>A free mode with no rules and no objectives. Explore locations, talk to other players, act out scenes and create your own stories within the Slendytubbies universe.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ENEMIES -->
+            <div class="about-block">
+                <h3 class="block-title reveal">Enemies</h3>
+                <p class="block-subtitle reveal">
+                    In Rebuild you won't face only the classic Tinky Winky.
+                    Other infected Teletubbies hunt on different maps too.
+                </p>
+
+                <div class="monster-grid">
+
+                    <div class="monster-card reveal">
+                        <div class="monster-portrait" aria-hidden="true">
+                            <img src="images/tinky-normal.png"   alt="" class="portrait-normal">
+                            <img src="images/tinky-infected.png" alt="" class="portrait-infected">
+                        </div>
+                        <div class="monster-content">
+                            <h4>Tinky Winky</h4>
+                            <p>The main antagonist of the series. Chases players, guards the nearest custard and never forgives mistakes.</p>
+                        </div>
+                    </div>
+
+                    <div class="monster-card reveal">
+                        <div class="monster-portrait" aria-hidden="true">
+                            <img src="images/dipsy-normal.png"   alt="" class="portrait-normal">
+                            <img src="images/dipsy-infected.png" alt="" class="portrait-infected">
+                        </div>
+                        <div class="monster-content">
+                            <h4>Dipsy</h4>
+                            <p>A blind mutant who hunts by sound. He cannot see players at all, but hears every step. Fast and extremely aggressive — on maps like Custard Facility, getting close is fatal.</p>
+                        </div>
+                    </div>
+
+                    <div class="monster-card reveal">
+                        <div class="monster-portrait" aria-hidden="true">
+                            <img src="images/laalaa-normal.png"   alt="" class="portrait-normal">
+                            <img src="images/laalaa-infected.png" alt="" class="portrait-infected">
+                        </div>
+                        <div class="monster-content">
+                            <h4>Laa-Laa</h4>
+                            <p>Tall and blind, yet deadly. Hunts by sound and appears on the night versions of the maps.</p>
+                        </div>
+                    </div>
+
+                    <div class="monster-card reveal">
+                        <div class="monster-portrait" aria-hidden="true">
+                            <img src="images/po-normal.png"   alt="" class="portrait-normal">
+                            <img src="images/po-infected.png" alt="" class="portrait-infected">
+                        </div>
+                        <div class="monster-content">
+                            <h4>Po</h4>
+                            <p>The red Teletubby who became the final boss. Slower than the others, but deals devastating damage.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- MULTIPLAYER -->
+            <div class="about-block">
+                <h3 class="block-title reveal">Steam Multiplayer</h3>
+                <p class="about-text reveal">
+                    At the core of Rebuild lies a working online game. Create a lobby,
+                    invite your friends, pick a map and a mode. All players see each
+                    other, monsters follow a shared logic, and progress syncs in
+                    real time.
+                </p>
+            </div>
+
+            <!-- SYSTEM REQUIREMENTS -->
+            <div class="about-block">
+                <h3 class="block-title reveal">System Requirements</h3>
+                <p class="block-subtitle reveal">Make sure your PC can handle the horror.</p>
+
+                <div class="sysreq-grid">
+                    <div class="sysreq-card reveal">
+                        <h4>Minimum</h4>
+                        <ul>
+                            <li><span>OS</span> Windows 10 (64-bit)</li>
+                            <li><span>CPU</span> Intel Core i3-4130 / AMD FX-6300</li>
+                            <li><span>RAM</span> 4 GB</li>
+                            <li><span>GPU</span> NVIDIA GTX 660 / AMD R9 270</li>
+                            <li><span>Storage</span> 3 GB available space</li>
+                            <li><span>Network</span> Broadband Internet connection</li>
+                        </ul>
+                    </div>
+
+                    <div class="sysreq-card reveal">
+                        <h4>Recommended</h4>
+                        <ul>
+                            <li><span>OS</span> Windows 10/11 (64-bit)</li>
+                            <li><span>CPU</span> Intel Core i5-7400 / AMD Ryzen 5 1600</li>
+                            <li><span>RAM</span> 8 GB</li>
+                            <li><span>GPU</span> NVIDIA GTX 1060 / AMD RX 580</li>
+                            <li><span>Storage</span> 5 GB available space (SSD)</li>
+                            <li><span>Network</span> Broadband Internet connection</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===================== DOWNLOAD ===================== -->
+    <section class="download-section" id="downloadSection">
+        <h2 class="reveal">Download the Game</h2>
+        <p class="subtitle reveal">Pick your platform</p>
+
+        <div class="platforms">
+            <!--<a href="SlendytubbiesRebuild_Windows.zip" download class="platform-btn reveal">
+                Windows
+                <small>v1.0 — .zip</small>
+            </a>-->
+            <a href="#" class="platform-btn disabled reveal">
+                Windows
+                <small>soon...</small>
+            </a>
+            <a href="#" class="platform-btn disabled reveal">
+                Linux
+                <small>soon...</small>
+            </a>
+            <a href="#" class="platform-btn disabled reveal">
+                Android
+                <small>soon...</small>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-socials">
+                <a href="https://discord.gg/6FmhUw7cuv" target="_blank" rel="noopener" class="social-btn discord">
+                    <span class="social-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" width="28" height="28" fill="currentColor">
+                            <path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"/>
+                        </svg>
+                    </span>
+                    <span class="social-label">Discord</span>
+                </a>
+            </div>
+
+            <p class="footer-copy">
+                © 2026 Slendytubbies Rebuild — Fan project.<br>
+                Not affiliated with Zeoworks. Slendytubbies © Zeoworks.
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
