@@ -147,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             visible.forEach((entry, i) => {
                 const el = entry.target;
-                // НЕ добавляем transitionDelay монстрам — у них анимация, а не transition
                 if (!el.classList.contains('monster-card')) {
                     el.style.transitionDelay = `${i * 0.12}s`;
                 }
@@ -168,8 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 7. FIX: после завершения появления карточки монстра
     //    ставим .intro-done, чтобы monsterGlitchIn больше
     //    не перезапускался при уходе курсора.
-    //    Плюс fallback на setTimeout — на случай, если по
-    //    какой-то причине animationend не сработает.
     // =========================================================
     document.querySelectorAll('.monster-card').forEach(card => {
         let done = false;
@@ -183,13 +180,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.animationName === 'monsterGlitchIn') markDone();
         });
 
-        // Fallback: если через 1.4s карточка видима, но intro-done нет — ставим вручную
         const checkFallback = () => {
             if (card.classList.contains('visible') && !card.classList.contains('intro-done')) {
                 markDone();
             }
         };
-        // Проверяем периодически — проще, чем ловить момент появления
         const intId = setInterval(() => {
             if (card.classList.contains('intro-done')) {
                 clearInterval(intId);
@@ -198,5 +193,43 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 400);
     });
+
+    // =========================================================
+    // 8. СКРЫТИЕ ПАНЕЛЕЙ ПРИ СКРОЛЛЕ
+    //    Когда hero видим меньше 60% — body.scrolled активируется,
+    //    панели (paint-frame) и подсказка плавно уезжают.
+    //    Возврат наверх — они возвращаются.
+    // =========================================================
+    const heroSection = document.getElementById('hero');
+
+    if (heroSection && 'IntersectionObserver' in window) {
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.intersectionRatio < 0.6) {
+                    document.body.classList.add('scrolled');
+                } else {
+                    document.body.classList.remove('scrolled');
+                }
+            });
+        }, {
+            threshold: [0, 0.2, 0.4, 0.6, 0.8, 1]
+        });
+
+        heroObserver.observe(heroSection);
+    } else if (heroSection) {
+        // Fallback: обычный scroll-listener
+        const onScroll = () => {
+            const rect = heroSection.getBoundingClientRect();
+            const visible = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
+            const ratio = visible / rect.height;
+            if (ratio < 0.6) {
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
 
 });

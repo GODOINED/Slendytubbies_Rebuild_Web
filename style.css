@@ -76,9 +76,6 @@ body {
     20%, 22%, 24%, 55% { opacity: 0.4; }
 }
 
-/* ============================================================
-   ПОЯВЛЕНИЕ КАРТОЧКИ — играет ОДИН РАЗ
-============================================================ */
 @keyframes monsterGlitchIn {
     0% {
         opacity: 0;
@@ -131,20 +128,11 @@ body {
     100% { opacity: 0; }
 }
 
-/* ============================================================
-   ГЛИТЧ ПРИ HOVER — filter + физическое дрожание карточки.
-   Большую часть цикла стоит в hover-базовой позиции
-   translate3d(0, -10px, 0) scale(1.02), чтобы при снятии
-   анимации рывок был незаметен — transition плавно
-   вернёт карточку из hover в базу.
-============================================================ */
 @keyframes monsterHoverGlitch {
     0%, 4%, 12%, 45%, 50%, 100% {
         transform: translate3d(0, -10px, 0) scale(1.02);
         filter: hue-rotate(-10deg) contrast(1.25) saturate(1.3) brightness(1.05);
     }
-
-    /* Первый рывок — короткий, резкий */
     5% {
         transform: translate3d(-5px, -10px, 0) scale(1.025);
         filter: hue-rotate(-30deg) contrast(1.5) saturate(2) brightness(1.2);
@@ -165,10 +153,6 @@ body {
         transform: translate3d(0, -10px, 0) scale(1.02);
         filter: hue-rotate(-10deg) contrast(1.25) saturate(1.3) brightness(1.05);
     }
-
-    /* Пауза 12–45% — база */
-
-    /* Второй рывок — сильнее */
     46% {
         transform: translate3d(-6px, -10px, 0) scale(1.028);
         filter: hue-rotate(-35deg) contrast(1.55) saturate(2.2) brightness(1.25);
@@ -204,6 +188,11 @@ body {
     7%, 48% {
         text-shadow: 0 0 25px rgba(255,0,0,1), 0 0 55px rgba(255,0,0,0.8), 0 0 90px rgba(255,0,0,0.5);
     }
+}
+
+@keyframes scrollArrowBounce {
+    0%, 100% { transform: translate3d(0, 0, 0); opacity: 1; }
+    50%      { transform: translate3d(0, 8px, 0); opacity: 0.6; }
 }
 
 /* ============================================================
@@ -254,20 +243,34 @@ body {
     z-index: 10;
     pointer-events: none;
     will-change: transform, opacity;
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .paint-frame.top {
     top: 0;
-    transform-origin: center;
+    transform-origin: top center;
     filter: drop-shadow(0 12px 14px rgba(0,0,0,0.9)) drop-shadow(0 4px 6px rgba(0,0,0,0.7));
     animation: fogDriftTop 40s ease-in-out infinite, fogBreatheTop 14s ease-in-out infinite;
 }
 
 .paint-frame.bottom {
     bottom: -2px;
-    transform-origin: center;
+    transform-origin: bottom center;
     filter: drop-shadow(0 -12px 14px rgba(0,0,0,0.9)) drop-shadow(0 -4px 6px rgba(0,0,0,0.7));
     animation: fogDriftBottom 48s ease-in-out infinite, fogBreatheBottom 16s ease-in-out infinite;
+}
+
+body.scrolled .paint-frame.top {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+    animation-play-state: paused;
+}
+
+body.scrolled .paint-frame.bottom {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+    animation-play-state: paused;
 }
 
 .hero-content {
@@ -338,15 +341,10 @@ body.loaded .download-btn-wrap { opacity: 1; }
     border: 3px solid #fff;
     filter: url(#roughLineFilter);
     transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: -1;
     pointer-events: none;
-}
-
-.download-btn:hover::before {
-    background: #d40000;
-    border-color: #d40000;
-    box-shadow: 0 0 30px rgba(212,0,0,0.6), 0 0 60px rgba(212,0,0,0.3);
 }
 
 .download-btn:hover {
@@ -362,6 +360,123 @@ body.loaded .download-btn-wrap { opacity: 1; }
 }
 
 .download-btn:active { transform: scale(0.97); }
+
+/* ============================================================
+   SCROLL HINT — ВНИЗУ ПО ЦЕНТРУ, прямо на тумане
+============================================================ */
+.scroll-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 50px;                   /* прямо на тумане */
+    z-index: 20;                    /* поверх тумана */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #d40000;
+    opacity: 0;
+    transform: translate3d(-50%, 20px, 0);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1) 1.4s,
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1) 1.4s;
+    pointer-events: none;
+    text-align: center;
+}
+
+body.loaded .scroll-hint {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0);
+}
+
+.scroll-hint-text {
+    font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(212, 0, 0, 0.9),
+                 0 0 35px rgba(212, 0, 0, 0.5);
+    animation: redPulse 3s ease-in-out infinite;
+}
+
+.scroll-hint-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d40000;
+    filter: drop-shadow(0 0 10px rgba(212, 0, 0, 0.8));
+    animation: scrollArrowBounce 2s ease-in-out infinite;
+}
+
+body.scrolled .scroll-hint {
+    opacity: 0;
+    transform: translate3d(-50%, 20px, 0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* ============================================================
+   HERO DISCORD — левый нижний угол, прямо на тумане
+============================================================ */
+.hero-discord {
+    position: absolute;
+    left: 40px;
+    bottom: 50px;                   /* прямо на тумане */
+    z-index: 20;                    /* поверх тумана */
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    color: #d40000;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    opacity: 0;
+    transform: translate3d(-20px, 0, 0);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1) 1.6s,
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1) 1.6s,
+                color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+}
+
+.hero-discord svg {
+    width: 20px;
+    height: 20px;
+    color: #d40000;
+    filter: drop-shadow(0 0 8px rgba(212, 0, 0, 0.7));
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.hero-discord span {
+    text-shadow: 0 0 12px rgba(212, 0, 0, 0.8),
+                 0 0 25px rgba(212, 0, 0, 0.4);
+}
+
+body.loaded .hero-discord {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+.hero-discord:hover {
+    color: #fff;
+}
+
+.hero-discord:hover svg {
+    transform: scale(1.2) rotate(-8deg);
+    color: #5865F2;
+    filter: drop-shadow(0 0 12px rgba(88, 101, 242, 0.9));
+}
+
+.hero-discord:hover span {
+    text-shadow: 0 0 15px rgba(88, 101, 242, 0.9),
+                 0 0 35px rgba(88, 101, 242, 0.5);
+}
+
+body.scrolled .hero-discord {
+    opacity: 0;
+    transform: translate3d(-20px, 0, 0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
 /* ============================================================
    ABOUT SECTION
@@ -485,9 +600,6 @@ body.loaded .download-btn-wrap { opacity: 1; }
 
 /* ============================================================
    MONSTER GRID
-   - Появление: monsterGlitchIn (один раз), затем .intro-done
-   - Hover: monsterHoverGlitch (только filter)
-   - Уход: плавный через transition
 ============================================================ */
 .monster-grid {
     display: grid;
@@ -519,15 +631,11 @@ body.loaded .download-btn-wrap { opacity: 1; }
         box-shadow 1s ease-out;
 }
 
-/* === APPEAR: играет только когда карточка .visible и НЕ .intro-done ===
-   Как только JS добавит .intro-done — это правило перестаёт совпадать,
-   и animation снимается БЕЗ перезапуска. */
 .monster-card.visible:not(.intro-done) {
     opacity: 1;
     animation: monsterGlitchIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* === ФИНАЛЬНОЕ СОСТОЯНИЕ после появления (JS ставит .intro-done) === */
 .monster-card.intro-done {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
@@ -610,9 +718,6 @@ body.loaded .download-btn-wrap { opacity: 1; }
     animation: cardFlicker 1.8s ease-in-out infinite;
 }
 
-/* === HOVER — только когда .intro-done (появление завершено) ===
-   Специфичность 0,3,0 — гарантированно перебивает .monster-card.intro-done.
-   При уходе курсора правило исчезает → возврат через transition (плавно). */
 .monster-card.intro-done:hover {
     border-color: #d40000;
     background: #0d0505;
@@ -1057,7 +1162,7 @@ body.loaded .download-btn-wrap { opacity: 1; }
 }
 
 /* ============================================================
-   REVEAL — ИСКЛЮЧАЕМ .monster-card, чтобы не конфликтовало
+   REVEAL
 ============================================================ */
 .reveal:not(.monster-card) {
     opacity: 0;
@@ -1116,6 +1221,34 @@ body.loaded .download-btn-wrap { opacity: 1; }
 
     .download-btn { font-size: 1.1rem; padding: 14px 45px; letter-spacing: 2px; }
 
+    /* Подсказка — прямо на тумане */
+    .scroll-hint {
+        bottom: 35px;
+        gap: 5px;
+    }
+    .scroll-hint-text {
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+    }
+    .scroll-hint-arrow svg {
+        width: 12px;
+        height: 20px;
+    }
+
+    /* Discord — прямо на тумане */
+    .hero-discord {
+        left: 14px;
+        bottom: 35px;
+        padding: 8px 12px;
+        font-size: 0.78rem;
+        letter-spacing: 2px;
+        gap: 6px;
+    }
+    .hero-discord svg {
+        width: 16px;
+        height: 16px;
+    }
+
     .about-section { padding: 70px 16px; }
     .about-intro { margin-bottom: 70px; }
     .about-block { margin-bottom: 75px; }
@@ -1162,7 +1295,7 @@ body.loaded .download-btn-wrap { opacity: 1; }
     .footer { padding: 55px 16px 30px; }
     .footer-socials { gap: 15px; margin-bottom: 35px; }
     .social-btn { width: 100%; max-width: 340px; justify-content: center; font-size: 1rem; padding: 15px 22px; letter-spacing: 2px; }
-    .footer-copy { font-size: 0.85rem; letter-spacing: 1px; }
+    .footer-copy { font-size: 0.85rem; letter-spacing: 0.5px; }
 }
 
 @media (max-width: 380px) {
@@ -1170,6 +1303,10 @@ body.loaded .download-btn-wrap { opacity: 1; }
     .download-btn { padding: 12px 32px; font-size: 1rem; }
     .about-heading { font-size: 1.9rem; }
     .block-title { font-size: 1.6rem; }
+
+    .scroll-hint-text { font-size: 0.6rem; }
+    .hero-discord { font-size: 0.7rem; padding: 6px 10px; }
+    .hero-discord svg { width: 14px; height: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
