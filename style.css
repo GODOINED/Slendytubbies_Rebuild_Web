@@ -362,13 +362,13 @@ body.loaded .download-btn-wrap { opacity: 1; }
 .download-btn:active { transform: scale(0.97); }
 
 /* ============================================================
-   SCROLL HINT — ВНИЗУ ПО ЦЕНТРУ, прямо на тумане
+   SCROLL HINT
 ============================================================ */
 .scroll-hint {
     position: absolute;
     left: 50%;
-    bottom: 50px;                   /* прямо на тумане */
-    z-index: 20;                    /* поверх тумана */
+    bottom: 50px;
+    z-index: 20;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -412,13 +412,13 @@ body.scrolled .scroll-hint {
 }
 
 /* ============================================================
-   HERO DISCORD — левый нижний угол, прямо на тумане
+   HERO DISCORD
 ============================================================ */
 .hero-discord {
     position: absolute;
     left: 40px;
-    bottom: 50px;                   /* прямо на тумане */
-    z-index: 20;                    /* поверх тумана */
+    bottom: 50px;
+    z-index: 20;
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -763,6 +763,101 @@ body.scrolled .hero-discord {
 }
 
 .monster-card.intro-done:hover p { color: #eaeaea; transform: translate3d(4px, 0, 0); }
+
+/* ============================================================
+   FEATURE GRID (VOIP / Lobbies / Sync)
+============================================================ */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 35px;
+    margin-top: 60px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feature-card {
+    background: #0a0a0a;
+    border: 1px solid #1f1f1f;
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right,
+                transparent 0%,
+                #d40000 50%,
+                transparent 100%);
+    opacity: 0.35;
+    transition: opacity 0.5s ease;
+}
+
+.feature-card:hover {
+    border-color: #d40000;
+    background: #0d0505;
+    transform: translate3d(0, -6px, 0);
+    box-shadow: 0 15px 40px rgba(212, 0, 0, 0.3);
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+.feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 22px;
+    color: #d40000;
+    border: 1px solid #2a0000;
+    background: radial-gradient(circle at center,
+                rgba(212, 0, 0, 0.18) 0%,
+                rgba(212, 0, 0, 0.04) 60%,
+                transparent 100%);
+    filter: drop-shadow(0 0 10px rgba(212, 0, 0, 0.5));
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+                filter 0.5s ease,
+                border-color 0.5s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.08) rotate(-4deg);
+    border-color: #d40000;
+    filter: drop-shadow(0 0 18px rgba(212, 0, 0, 0.9));
+}
+
+.feature-card h4 {
+    font-size: clamp(1.4rem, 2vw, 1.7rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 16px;
+    transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+
+.feature-card:hover h4 {
+    color: #d40000;
+    text-shadow: 0 0 15px rgba(212, 0, 0, 0.8);
+}
+
+.feature-card p {
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    color: #b0b0b0;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+}
 
 /* ============================================================
    SYSTEM REQUIREMENTS
@@ -1185,6 +1280,7 @@ body.scrolled .hero-discord {
     .about-intro { margin-bottom: 100px; }
     .about-block { margin-bottom: 110px; }
     .mode-grid, .monster-grid { gap: 30px; }
+    .feature-grid { gap: 30px; }
     .about-heading { letter-spacing: 4px; }
 }
 
@@ -1203,6 +1299,7 @@ body.scrolled .hero-discord {
     .mode-grid { grid-template-columns: 1fr; }
     .monster-grid { grid-template-columns: repeat(2, 1fr); }
     .sysreq-grid { grid-template-columns: 1fr; }
+    .feature-grid { grid-template-columns: 1fr; }
 
     .download-section { min-height: auto; padding: 90px 20px; }
     .platforms { gap: 30px; }
@@ -1221,7 +1318,6 @@ body.scrolled .hero-discord {
 
     .download-btn { font-size: 1.1rem; padding: 14px 45px; letter-spacing: 2px; }
 
-    /* Подсказка — прямо на тумане */
     .scroll-hint {
         bottom: 35px;
         gap: 5px;
@@ -1235,7 +1331,6 @@ body.scrolled .hero-discord {
         height: 20px;
     }
 
-    /* Discord — прямо на тумане */
     .hero-discord {
         left: 14px;
         bottom: 35px;
@@ -1271,6 +1366,30 @@ body.scrolled .hero-discord {
 
     .monster-portrait img { max-width: 90%; max-height: 90%; }
     .monster-portrait .portrait-normal { opacity: 0.08; }
+
+    .feature-grid {
+        gap: 25px;
+        margin-top: 45px;
+    }
+    .feature-card { padding: 30px 22px; }
+    .feature-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 18px;
+    }
+    .feature-icon svg {
+        width: 26px;
+        height: 26px;
+    }
+    .feature-card h4 {
+        font-size: 1.25rem;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+    }
+    .feature-card p {
+        font-size: 1rem;
+        line-height: 1.75;
+    }
 
     .sysreq-card { padding: 30px 22px; }
     .sysreq-card h4 { font-size: 1.5rem; letter-spacing: 3px; margin-bottom: 22px; }

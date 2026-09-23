@@ -196,9 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================================
     // 8. СКРЫТИЕ ПАНЕЛЕЙ ПРИ СКРОЛЛЕ
-    //    Когда hero видим меньше 60% — body.scrolled активируется,
-    //    панели (paint-frame) и подсказка плавно уезжают.
-    //    Возврат наверх — они возвращаются.
     // =========================================================
     const heroSection = document.getElementById('hero');
 
@@ -217,7 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         heroObserver.observe(heroSection);
     } else if (heroSection) {
-        // Fallback: обычный scroll-listener
         const onScroll = () => {
             const rect = heroSection.getBoundingClientRect();
             const visible = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
