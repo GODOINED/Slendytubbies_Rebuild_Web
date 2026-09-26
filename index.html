@@ -65,6 +65,20 @@
                 <feDisplacementMap in="SourceGraphic" in2="noise"
                                    scale="5" xChannelSelector="R" yChannelSelector="G"/>
             </filter>
+
+            <filter id="roughCardFilter" x="-30%" y="-30%" width="160%" height="160%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.02 0.035"
+                              numOctaves="2" seed="13" result="noise">
+                    <animate attributeName="baseFrequency" dur="26s"
+                             values="0.02 0.035;0.025 0.04;0.017 0.03;0.022 0.038;0.02 0.035"
+                             keyTimes="0;0.25;0.5;0.75;1"
+                             calcMode="spline"
+                             keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                             repeatCount="indefinite"/>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise"
+                                   scale="3" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
         </defs>
     </svg>
 
@@ -210,13 +224,27 @@
                         <h4>Versus</h4>
                         <p>One player becomes the monster and hunts the survivors. The rest must collect all custard before the timer runs out. Tension grows every second — because now the enemy thinks like you.</p>
                     </div>
-                    <div class="mode-card reveal">
+
+                    <div class="mode-card special reveal">
+                        <span class="mode-tag" aria-hidden="true">HARDCORE</span>
                         <h4>Classic+</h4>
                         <p>A harder version of classic. Collecting custard is not enough — you must find a key and open the door, start the generator to restore power, or complete another objective. Depends on the map.</p>
                     </div>
+
                     <div class="mode-card reveal">
                         <h4>RolePlay</h4>
                         <p>A free mode with no rules and no objectives. Explore locations, talk to other players, act out scenes and create your own stories within the Slendytubbies universe.</p>
+                    </div>
+
+                    <div class="mode-card special reveal">
+                        <span class="mode-tag" aria-hidden="true">HARDCORE</span>
+                        <h4>Timeout</h4>
+                        <p>
+                            Every second counts. Collect all custard before the timer hits zero —
+                            or the infected mutates. Each missed deadline makes it faster, deadlier,
+                            and grants it full vision of every player on the map. Panic is not an
+                            option. Speed is.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -343,7 +371,6 @@
 
                 </div>
 
-                <!-- Настройки сервера -->
                 <div class="settings-wrapper reveal">
                     <h4 class="settings-title">Flexible Server Settings</h4>
                     <p class="settings-subtitle">
@@ -491,6 +518,7 @@
                             <li>Discord button</li>
                             <li>VOIP integration announced</li>
                             <li>Flexible server settings revealed</li>
+                            <li>New game mode announced — Timeout</li>
                         </ul>
                     </div>
 

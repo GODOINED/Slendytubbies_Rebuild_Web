@@ -165,8 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================================
     // 7. FIX: после завершения появления карточки монстра
-    //    ставим .intro-done, чтобы monsterGlitchIn больше
-    //    не перезапускался при уходе курсора.
     // =========================================================
     document.querySelectorAll('.monster-card').forEach(card => {
         let done = false;

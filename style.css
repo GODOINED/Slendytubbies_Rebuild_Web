@@ -195,6 +195,32 @@ body {
     50%      { transform: translate3d(0, 8px, 0); opacity: 0.6; }
 }
 
+/* Заголовок специальных режимов */
+@keyframes specialTitle {
+    0%, 100% {
+        color: #fff;
+        text-shadow: 0 0 6px rgba(212, 0, 0, 0.3);
+    }
+    50% {
+        color: #d40000;
+        text-shadow: 0 0 15px rgba(212, 0, 0, 0.9),
+                     0 0 30px rgba(212, 0, 0, 0.5);
+    }
+}
+
+/* Тег (HARDCORE / ADVANCED) */
+@keyframes tagPulse {
+    0%, 100% {
+        opacity: 0.75;
+        border-color: rgba(212, 0, 0, 0.5);
+    }
+    50% {
+        opacity: 1;
+        border-color: #d40000;
+        box-shadow: 0 0 12px rgba(212, 0, 0, 0.7);
+    }
+}
+
 /* ============================================================
    HERO
 ============================================================ */
@@ -599,6 +625,75 @@ body.scrolled .hero-discord {
 }
 
 /* ============================================================
+   СПЕЦИАЛЬНАЯ КАРТОЧКА (.special)
+   Рваная SVG-обводка + фон в одном слое.
+   Используется для Classic+ и Timeout.
+============================================================ */
+.mode-card.special {
+    background: transparent;
+    border: none;
+    overflow: visible;
+    padding: 55px 45px;
+    position: relative;
+    isolation: isolate;
+}
+
+/* Скрываем базовый красный бортик */
+.mode-card.special::before { display: none; }
+
+/* Обводка + фон единым слоем */
+.mode-card.special::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    background: linear-gradient(180deg, #120000 0%, #0a0a0a 100%);
+    border: 2px solid #d40000;
+    filter: url(#roughCardFilter);
+    z-index: -1;
+    pointer-events: none;
+    transition: border-color 0.4s ease, background 0.4s ease;
+}
+
+.mode-card.special:hover {
+    background: transparent;
+    transform: translate3d(0, -8px, 0);
+    box-shadow: none;
+}
+
+.mode-card.special:hover::after {
+    border-color: #ff2020;
+    background: linear-gradient(180deg, #1c0000 0%, #0a0a0a 100%);
+}
+
+/* Тег в углу */
+.mode-tag {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 0.6rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #ff3030;
+    padding: 4px 10px;
+    border: 1px solid rgba(212, 0, 0, 0.55);
+    background: rgba(20, 0, 0, 0.9);
+    text-shadow: 0 0 8px rgba(212, 0, 0, 0.8);
+    z-index: 3;
+    animation: tagPulse 1.8s ease-in-out infinite;
+}
+
+.mode-card.special:hover .mode-tag {
+    animation: tagPulse 0.9s ease-in-out infinite;
+}
+
+/* Заголовок пульсирует */
+.mode-card.special h4 {
+    color: #fff;
+    animation: specialTitle 2.4s ease-in-out infinite;
+    padding-right: 75px;
+}
+
+/* ============================================================
    MONSTER GRID
 ============================================================ */
 .monster-grid {
@@ -765,7 +860,7 @@ body.scrolled .hero-discord {
 .monster-card.intro-done:hover p { color: #eaeaea; transform: translate3d(4px, 0, 0); }
 
 /* ============================================================
-   FEATURE GRID (VOIP / Lobbies / Sync)
+   FEATURE GRID
 ============================================================ */
 .feature-grid {
     display: grid;
@@ -809,9 +904,7 @@ body.scrolled .hero-discord {
     box-shadow: 0 15px 40px rgba(212, 0, 0, 0.3);
 }
 
-.feature-card:hover::before {
-    opacity: 1;
-}
+.feature-card:hover::before { opacity: 1; }
 
 .feature-icon {
     display: inline-flex;
@@ -946,9 +1039,7 @@ body.scrolled .hero-discord {
     box-shadow: 0 12px 35px rgba(212, 0, 0, 0.25);
 }
 
-.settings-card:hover::before {
-    height: 100%;
-}
+.settings-card:hover::before { height: 100%; }
 
 .settings-icon {
     display: inline-flex;
@@ -1184,11 +1275,7 @@ body.scrolled .hero-discord {
     margin-bottom: 18px;
 }
 
-.changelog-item ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+.changelog-item ul { list-style: none; padding: 0; margin: 0; }
 
 .changelog-item li {
     position: relative;
@@ -1455,18 +1542,9 @@ body.scrolled .hero-discord {
 
     .download-btn { font-size: 1.1rem; padding: 14px 45px; letter-spacing: 2px; }
 
-    .scroll-hint {
-        bottom: 35px;
-        gap: 5px;
-    }
-    .scroll-hint-text {
-        font-size: 0.7rem;
-        letter-spacing: 2px;
-    }
-    .scroll-hint-arrow svg {
-        width: 12px;
-        height: 20px;
-    }
+    .scroll-hint { bottom: 35px; gap: 5px; }
+    .scroll-hint-text { font-size: 0.7rem; letter-spacing: 2px; }
+    .scroll-hint-arrow svg { width: 12px; height: 20px; }
 
     .hero-discord {
         left: 14px;
@@ -1476,10 +1554,7 @@ body.scrolled .hero-discord {
         letter-spacing: 2px;
         gap: 6px;
     }
-    .hero-discord svg {
-        width: 16px;
-        height: 16px;
-    }
+    .hero-discord svg { width: 16px; height: 16px; }
 
     .about-section { padding: 70px 16px; }
     .about-intro { margin-bottom: 70px; }
@@ -1496,6 +1571,18 @@ body.scrolled .hero-discord {
     .mode-card h4 { font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 18px; }
     .mode-card p { font-size: 1.05rem; line-height: 1.7; }
 
+    .mode-card.special { padding: 40px 28px; }
+    .mode-card.special::after { inset: -4px; }
+    .mode-card.special h4 { padding-right: 60px; }
+
+    .mode-tag {
+        top: 10px;
+        right: 10px;
+        font-size: 0.55rem;
+        padding: 3px 8px;
+        letter-spacing: 2px;
+    }
+
     .monster-grid { grid-template-columns: 1fr; gap: 25px; }
     .monster-card { padding: 35px 25px; min-height: 340px; }
     .monster-card h4 { font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 15px; }
@@ -1504,66 +1591,22 @@ body.scrolled .hero-discord {
     .monster-portrait img { max-width: 90%; max-height: 90%; }
     .monster-portrait .portrait-normal { opacity: 0.08; }
 
-    .feature-grid {
-        gap: 25px;
-        margin-top: 45px;
-    }
+    .feature-grid { gap: 25px; margin-top: 45px; }
     .feature-card { padding: 30px 22px; }
-    .feature-icon {
-        width: 48px;
-        height: 48px;
-        margin-bottom: 18px;
-    }
-    .feature-icon svg {
-        width: 26px;
-        height: 26px;
-    }
-    .feature-card h4 {
-        font-size: 1.25rem;
-        letter-spacing: 2px;
-        margin-bottom: 12px;
-    }
-    .feature-card p {
-        font-size: 1rem;
-        line-height: 1.75;
-    }
+    .feature-icon { width: 48px; height: 48px; margin-bottom: 18px; }
+    .feature-icon svg { width: 26px; height: 26px; }
+    .feature-card h4 { font-size: 1.25rem; letter-spacing: 2px; margin-bottom: 12px; }
+    .feature-card p { font-size: 1rem; line-height: 1.75; }
 
-    .settings-wrapper {
-        margin-top: 60px;
-        padding-top: 50px;
-    }
-    .settings-title {
-        font-size: 1.7rem;
-        letter-spacing: 3px;
-    }
-    .settings-subtitle {
-        font-size: 1rem;
-        margin-bottom: 40px;
-    }
-    .settings-grid {
-        gap: 20px;
-    }
-    .settings-card {
-        padding: 24px 20px;
-    }
-    .settings-icon {
-        width: 40px;
-        height: 40px;
-        margin-bottom: 14px;
-    }
-    .settings-icon svg {
-        width: 22px;
-        height: 22px;
-    }
-    .settings-card h5 {
-        font-size: 1.1rem;
-        letter-spacing: 2px;
-        margin-bottom: 10px;
-    }
-    .settings-card p {
-        font-size: 0.95rem;
-        line-height: 1.7;
-    }
+    .settings-wrapper { margin-top: 60px; padding-top: 50px; }
+    .settings-title { font-size: 1.7rem; letter-spacing: 3px; }
+    .settings-subtitle { font-size: 1rem; margin-bottom: 40px; }
+    .settings-grid { gap: 20px; }
+    .settings-card { padding: 24px 20px; }
+    .settings-icon { width: 40px; height: 40px; margin-bottom: 14px; }
+    .settings-icon svg { width: 22px; height: 22px; }
+    .settings-card h5 { font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 10px; }
+    .settings-card p { font-size: 0.95rem; line-height: 1.7; }
 
     .sysreq-card { padding: 30px 22px; }
     .sysreq-card h4 { font-size: 1.5rem; letter-spacing: 3px; margin-bottom: 22px; }
